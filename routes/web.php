@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return "Hola.";
+    return "HOOOOOLA";
 });
 
-Route::get( 'mealsTable', 'MealController@index' )->name( 'meals.index' );
