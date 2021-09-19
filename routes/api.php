@@ -18,20 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::get();
-
-Route::get('test', function () {
-    return "Funciona la api";
-});
-
-Route::get('test2', function () {
-    return "Funciona la api";
-});
-
-Route::get('test3', function () {
-    return "Funciona la api";
-});
-
 Route::get( 'categories', 'CategoryController@index' )->name( 'categories.api' );
 Route::post( 'categories', 'CategoryController@store' )->name( 'categories.store.api' );
 Route::get( 'meals', 'MealController@index' )->name( 'meals.api' );
