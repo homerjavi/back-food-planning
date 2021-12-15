@@ -17,3 +17,5 @@ Route::get('/', function () {
     return "HOOOOOLA";
 });
 
+Route::get( 'test', 'TestController@test' )->name( 'test' );
+

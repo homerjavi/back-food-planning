@@ -19,6 +19,7 @@ class CategoryMealResource extends JsonResource
             'name'           => $this->name,
             'optimum_number' => $this->optimum_number,
             'parent_id'      => $this->parent_id,
+            'icon'           => new IconResource( $this->icon ),
             'meals'          => MealPlanningResource::collection( $this->meals )
         ];
     }

@@ -16,12 +16,7 @@ class MealController extends Controller
         $meals = Meal::with('category')->get();
 
         return response()->json( MealCategoryResource::collection($meals) );
-        /* $categories = Category::all();
-
-        return view('meals.list', [
-            'meals'      => $meals,
-            'categories' => $categories,
-        ]); */
+        
     }
 
     public function store( Request $request )
@@ -36,30 +31,32 @@ class MealController extends Controller
         $meal->recipe      = $request->recipe;
         $meal->save();
 
-        return response()->json( [
+        /* return response()->json( [
             'status' => true,
             'meal'   => $meal
-        ] );
+        ] ); */
+
+        return response()->json( new MealCategoryResource( $meal ) );
     }
 
-    public function update( Request $request, $meal )
+    public function update( Request $request, Meal $meal )
     {
-        $meal = Meal::find($meal);
+        /* $meal = Meal::find($meal);
         $mealData = (object) $request->item;
-
-        $meal->name        = $mealData->name;
-        $meal->description = $mealData->description;
-        $meal->category_id = $mealData->category[ 'id' ];
-        $meal->difficulty  = $mealData->difficulty;
-        $meal->minutes     = $mealData->minutes;
-        $meal->kalories    = $mealData->kalories;
-        $meal->recipe      = $mealData->recipe;
+ */
+        $meal->name        = $meal[ 'name' ];
+        $meal->description = $meal[ 'description' ];
+        $meal->category_id = $meal[ 'category' ][ 'id' ];
+        $meal->difficulty  = $meal[ 'difficulty' ];
+        $meal->minutes     = $meal[ 'minutes' ];
+        $meal->kalories    = $meal[ 'kalories' ];
+        $meal->recipe      = $meal[ 'recipe' ];
      
         if( $meal->isDirty() ){
             $meal->save();
         }
 
-        return json_encode(['status' => true]);
+        return response()->json( new MealCategoryResource( $meal ) );
     }
 
     public function destroy( $meal )
@@ -67,6 +64,7 @@ class MealController extends Controller
         $meal = Meal::find($meal);
         $meal->delete();
 
-        return json_encode(['status' => true]);        
+        // return json_encode(['status' => true]);
+        return response()->json( MealCategoryResource::collection( Meal::get() ) );        
     }
 }

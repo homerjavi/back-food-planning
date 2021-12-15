@@ -5,20 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class Planning extends Model
 {
     use HasFactory;
 
-    public function updateOrderSameType()
+    public function updateOrderSameType( $isDeleted = null )
     {
         $planningsToUpdateOrder = $this->sameType()
                                        ->equalOrHigherOrder($this->order)
                                        ->orderBy('order')
+                                       ->orderBy('updated_at', 'DESC')
+                                    //    ->orderBy('created_at', 'ASC')
                                        ->get();
+                                       
 
-        foreach ($planningsToUpdateOrder as $planning) {
-            $planning->order = $planning->order+1;
+        $firstOrder = count($planningsToUpdateOrder) > 0 ? $planningsToUpdateOrder->first()->order + 1 : 0;
+
+        //dump( $planningsToUpdateOrder, $firstOrder );
+
+        foreach ($planningsToUpdateOrder as $index => $planning) {
+            // $p = Planning::find( $planning->id );
+            $planning->order = $isDeleted ? $planning->order - 1 : $firstOrder++;
+            
             $planning->save();
         }
     }
@@ -26,13 +36,14 @@ class Planning extends Model
     public function scopeSameType(Builder $query)
     {
         return $query->where('date', $this->date)
-                     ->where('hour', $this->hour)
-                     ->where('type', $this->type);
+                     ->where('meal_hour_id', $this->meal_hour_id)
+                     ->where('meal_type_id', $this->meal_type_id);
     }
 
     public function scopeEqualOrHigherOrder(Builder $query, $order)
     {
-        return $query->where('order', '>=', $order);
+        return $query->where('order', '>=', $order)
+                     ->where('id', '!=', $this->id);
     }
 
 

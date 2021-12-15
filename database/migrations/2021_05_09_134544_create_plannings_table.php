@@ -15,11 +15,11 @@ class CreatePlanningsTable extends Migration
     {
         Schema::create('plannings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('meal_id');
+            $table->unsignedBigInteger('meal_hour_id');
+            $table->unsignedBigInteger('meal_type_id');
             $table->date('date');
             $table->string('day_of_week');
-            $table->string('hour');
-            $table->string('type');
-            $table->integer('meal_id');
             $table->integer('order');
             $table->timestamps();
         });

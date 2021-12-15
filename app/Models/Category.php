@@ -16,4 +16,9 @@ class Category extends Model
     {
         return $this->hasMany( Meal::class );
     }
+
+    public function icon()
+    {
+        return $this->belongsTo( Icon::class );
+    }
 }

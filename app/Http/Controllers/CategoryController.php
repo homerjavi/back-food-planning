@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CategoryMealResource;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\IconResource;
 use App\Models\Category;
+use App\Models\Icon;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,14 +14,10 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('meals')->get();
-
-        /* return view('categories.list', [
-            'categories' => CategoryMealResource::collection( $categories ),
-        ]); */
-
+        
         $data = [
-            // 'categories' => $categories,
             'categories' => CategoryMealResource::collection( $categories ),
+            'icons'      => IconResource::collection( Icon::all() ),
         ];
 
         return response()->json( $data );
@@ -30,28 +28,31 @@ class CategoryController extends Controller
         
         $category                 = new Category();
         $category->name           = $request->name;
+        $category->icon_id        = $request->icon['id'];
         $category->optimum_number = $request->optimum_number;
         $category->save();
 
-        return response()->json( [
-            'status'   => true,
-            'category' => $category
-        ] );
+        return response()->json( new CategoryResource( $category ) );
     }
 
-    public function update( Request $request, $category )
+    public function update( Request $request, Category $category )
     {
-        $category = category::find($category);
-        $categoryData = (object) $request->item;
+        // return response()->json( $request->all );
 
-        $category->name           = $categoryData->name;
-        $category->optimum_number = $categoryData->optimum_number;
+        // $category = category::find($category);
+        // $categoryData = (object) $request->item;
+
+        $category->name           = $request[ 'name' ];
+        $category->icon_id        = $request[ 'icon' ][ 'id' ];
+        $category->optimum_number = $request[ 'optimum_number' ];
      
         if( $category->isDirty() ){
             $category->save();
         }
 
-        return json_encode(['status' => true]);
+        // return json_encode(['status' => true]);
+
+        return response()->json( new CategoryResource( $category ) );
     }
 
     public function destroy( $category )
@@ -59,6 +60,7 @@ class CategoryController extends Controller
         $category = Category::find($category);
         $category->delete();
 
-        return json_encode(['status' => true]);        
+        // return json_encode(['status' => true]);        
+        return response()->json( CategoryResource::collection( Category::get() ) );
     }
 }

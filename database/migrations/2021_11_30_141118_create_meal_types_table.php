@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateMealTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('meal_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('optimum_number')->default(0);
-            $table->integer('parent_id')->nullable();
-            $table->unsignedBigInteger('icon_id')->nullable();
+            $table->string( 'name' );
+            $table->string( 'color', 7 )->default( '#FFFFFF' );
+            $table->unsignedInteger( 'order' );
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('meal_types');
     }
 }

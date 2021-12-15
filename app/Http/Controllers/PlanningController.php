@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PlanningResource;
 use App\Http\Services\PlanningService;
 use App\Models\Category;
 use App\Models\Meal;
+use App\Models\MealHour;
+use App\Models\MealType;
 use App\Models\Planning;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
@@ -17,11 +20,15 @@ class PlanningController extends Controller
     {
         $meals      = Meal::with('category')->get();
         $categories = Category::with('meals')->get();
+        $mealTypes  = MealType::orderBy( 'order' )->get();
+        $mealHours  = MealHour::orderBy( 'order' )->get();
   
         $data = [
             'planning'   => $planningService->getPlanning(),
-            'categories' => $categories,
+            'categories' => CategoryResource::collection( $categories ),
             'meals'      => $meals,
+            'mealTypes'  => $mealTypes,
+            'mealHours'  => $mealHours,
         ];
 
         return response()->json( $data );
@@ -32,36 +39,50 @@ class PlanningController extends Controller
         $mondayThisWeek  = new DateTime('monday this week');
         $date            = date('Y-m-d', strtotime($mondayThisWeek->format( 'Y-m-d' ) . ' +' . ( $request->day_of_week-1 ) . 'days' ) );
 
-        $planning              = new Planning();
-        $planning->meal_id     = $request->meal_id;
-        $planning->date        = $date;
-        $planning->day_of_week = $request->day_of_week;
-        $planning->hour        = $request->hour;
-        $planning->type        = 'Lucas';
-        $planning->order       = $request->order;
-        $planning->updateOrderSameType();
+        $planning               = new Planning();
+        $planning->meal_id      = $request->meal_id;
+        $planning->date         = $date;
+        $planning->day_of_week  = $request->day_of_week;
+        $planning->meal_hour_id = $request->meal_hour_id;
+        $planning->meal_type_id = MealType::first()->id;
+        $planning->order        = $request->order;
         $planning->save();
+        
+        $planning->updateOrderSameType( false );
 
-        $data = [
-            'planning' => $planning,
-        ];
-
-        /* $planningsOfDayHour = Planning::where( 'date', $date )
-                                      ->where( 'hour', $request->newMeal[ 'hour' ] )
-                                      ->where( 'type', $request->newMeal[ 'type' ] )
-                                      ->orderBy( 'order' )->get(); */
+        $planningTarget = Planning::where('date', $planning->date)
+            ->where('meal_hour_id', $planning->meal_hour_id)
+            ->where('meal_type_id', $planning->meal_type_id)
+            ->orderBy('order')
+            ->get();
+    
+            return response()->json( PlanningResource::collection( $planningTarget ) );
 
         /* $data = [
-            'day_of_week' => $request->newMeal[ 'day_of_week' ],
-            'hour'        => $request->newMeal[ 'hour' ],
-            'planning'    => PlanningResource::collection( $planningsOfDayHour )
-        ]; */
+            'planning' => new PlanningResource( $planning ),
+        ];
 
-        return response()->json( $data );
+        return response()->json( $data ); */
         
     }
 
-    public function update( Request $request, Planning $planning )
+    public function updateOrderPlanning( Request $request )
+    {
+        $planning = Planning::find( $request->id );
+        $planning->order         = $request->order;
+        $planning->save();
+        $planning->updateOrderSameType( false );
+
+        $planningTarget = Planning::where('date', $planning->date)
+                        ->where('meal_hour_id', $planning->meal_hour_id)
+                        ->where('meal_type_id', $planning->meal_type_id)
+                        ->orderBy('order')
+                        ->get();
+
+        return response()->json( PlanningResource::collection( $planningTarget ) );
+    }
+
+    /* public function update( Request $request, Planning $planning )
     {
         //dd( $request->all(), $planning );
 
@@ -113,24 +134,22 @@ class PlanningController extends Controller
         ];
 
         return response( $data , 200 );
-    }
+    } */
 
     public function destroy( Planning $planning )
     {
+        $planning->updateOrderSameType( true );
+        
         $isDestroy = $planning->delete();
 
-        $plannings = Planning::where( 'date', $planning->date )
-                            ->where( 'hour', $planning->hour )
-                            ->where( 'type', $planning->type )
-                            ->orderBy( 'order' )->get();
-
-        foreach ( $plannings as $key => $planning ) {
-            $planning->order = $key + 1;
-            $planning->save();
-        }
-
         if( $isDestroy ){
-            return PlanningResource::collection( $plannings );
+            $planningTarget = Planning::where('date', $planning->date)
+            ->where('meal_hour_id', $planning->meal_hour_id)
+            ->where('meal_type_id', $planning->meal_type_id)
+            ->orderBy('order')
+            ->get();
+    
+            return response()->json( PlanningResource::collection( $planningTarget ) );
         }
         else{
             return 'KO';
