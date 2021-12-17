@@ -31,19 +31,11 @@ class MealController extends Controller
         $meal->recipe      = $request->recipe;
         $meal->save();
 
-        /* return response()->json( [
-            'status' => true,
-            'meal'   => $meal
-        ] ); */
-
         return response()->json( new MealCategoryResource( $meal ) );
     }
 
     public function update( Request $request, Meal $meal )
     {
-        /* $meal = Meal::find($meal);
-        $mealData = (object) $request->item;
- */
         $meal->name        = $meal[ 'name' ];
         $meal->description = $meal[ 'description' ];
         $meal->category_id = $meal[ 'category' ][ 'id' ];
@@ -64,7 +56,6 @@ class MealController extends Controller
         $meal = Meal::find($meal);
         $meal->delete();
 
-        // return json_encode(['status' => true]);
         return response()->json( MealCategoryResource::collection( Meal::get() ) );        
     }
 }
