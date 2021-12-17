@@ -19,8 +19,10 @@ class CategoryService
         }
 
         $category->name           = $request->name;
-        $category->icon_id        = $request->has('icon') ? $request->icon[ 'id' ] : Icon::first()->id;
+        $category->icon_id        = $request->has('icon') && $request->icon ? $request->icon[ 'id' ] : Icon::first()->id;
         $category->optimum_number = $request->optimum_number ?? 0;
         $category->save();
+
+        return $category;
     }
 }

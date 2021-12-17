@@ -39,7 +39,7 @@ class CategoryController extends Controller
         $category->icon_id        = $request[ 'icon' ][ 'id' ];
         $category->optimum_number = $request[ 'optimum_number' ]; */
 
-        $category = $categoryService->save( $request );
+        $category = $categoryService->save( $request, $category );
      
         if( $category->isDirty() ){
             $category->save();
