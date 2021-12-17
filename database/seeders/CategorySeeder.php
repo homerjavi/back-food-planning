@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Icon;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -13,6 +15,9 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        
+        Category::create( [
+            'name'    => 'Categoría 1',
+            'icon_id' => Icon::first()->id,
+        ] );
     }
 }

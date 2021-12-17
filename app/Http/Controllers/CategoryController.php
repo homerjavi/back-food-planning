@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Resources\CategoryMealResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\IconResource;
+use App\Http\Services\CategoryService;
 use App\Models\Category;
 use App\Models\Icon;
 use Illuminate\Http\Request;
@@ -23,34 +25,25 @@ class CategoryController extends Controller
         return response()->json( $data );
     }
 
-    public function store( Request $request )
+    public function store( CategoryStoreRequest $request, CategoryService $categoryService )
     {
         
-        $category                 = new Category();
-        $category->name           = $request->name;
-        $category->icon_id        = $request->icon['id'];
-        $category->optimum_number = $request->optimum_number;
-        $category->save();
+        $category = $categoryService->save( $request );
 
         return response()->json( new CategoryResource( $category ) );
     }
 
-    public function update( Request $request, Category $category )
+    public function update( Request $request, Category $category, CategoryService $categoryService )
     {
-        // return response()->json( $request->all );
-
-        // $category = category::find($category);
-        // $categoryData = (object) $request->item;
-
-        $category->name           = $request[ 'name' ];
+        /* $category->name           = $request[ 'name' ];
         $category->icon_id        = $request[ 'icon' ][ 'id' ];
-        $category->optimum_number = $request[ 'optimum_number' ];
+        $category->optimum_number = $request[ 'optimum_number' ]; */
+
+        $category = $categoryService->save( $request );
      
         if( $category->isDirty() ){
             $category->save();
         }
-
-        // return json_encode(['status' => true]);
 
         return response()->json( new CategoryResource( $category ) );
     }
@@ -59,8 +52,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($category);
         $category->delete();
-
-        // return json_encode(['status' => true]);        
+    
         return response()->json( CategoryResource::collection( Category::get() ) );
     }
 }

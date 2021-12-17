@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use App\Models\Meal;
+use App\Models\MealHour;
 use Illuminate\Database\Seeder;
 
-class MealSeeder extends Seeder
+class MealHourSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,9 +14,9 @@ class MealSeeder extends Seeder
      */
     public function run()
     {
-        Meal::create( [
-            'name' => 'Huevo con patatas',
-            'category_id' => Category::first()->id,
+        MealHour::create( [
+            'name'  => 'Almuerzo',
+            'order' => 1,
         ] );
     }
 }

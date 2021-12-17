@@ -16,68 +16,40 @@ class IconSeeder extends Seeder
     {
         Icon::insert( [
             [
-                'name' => 'Pollo color 1',
-                'path' => 'storage/images/icons/pollo-color-1.png',
+                'name' => 'Comida',
+                'path' => 'storage/images/icons/comida.png',
             ],
             [
-                'name' => 'Pollo color 2',
-                'path' => 'storage/images/icons/pollo-color-2.png',
+                'name' => 'Pollo 1',
+                'path' => 'storage/images/icons/pollo-1.png',
             ],
             [
-                'name' => 'Pollo bn 1',
-                'path' => 'storage/images/icons/pollo-bn-1.png',
+                'name' => 'Pollo 2',
+                'path' => 'storage/images/icons/pollo-2.png',
             ],
             [
-                'name' => 'Pollo bn 2',
-                'path' => 'storage/images/icons/pollo-bn-2.png',
+                'name' => 'Ternera 1',
+                'path' => 'storage/images/icons/ternera-1.png',
             ],
             [
-                'name' => 'Ternera color 1',
-                'path' => 'storage/images/icons/ternera-color-1.png',
+                'name' => 'Ternera 2',
+                'path' => 'storage/images/icons/ternera-2.png',
             ],
             [
-                'name' => 'Ternera color 2',
-                'path' => 'storage/images/icons/ternera-color-2.png',
+                'name' => 'Cerdo 1',
+                'path' => 'storage/images/icons/cerdo-1.png',
             ],
             [
-                'name' => 'Ternera bn 1',
-                'path' => 'storage/images/icons/ternera-bn-1.png',
+                'name' => 'Cerdo 2',
+                'path' => 'storage/images/icons/cerdo-2.png',
             ],
             [
-                'name' => 'Ternera bn 2',
-                'path' => 'storage/images/icons/ternera-bn-2.png',
+                'name' => 'Pescado 1',
+                'path' => 'storage/images/icons/pescado-1.png',
             ],
             [
-                'name' => 'Cerdo color 1',
-                'path' => 'storage/images/icons/cerdo-color-1.png',
-            ],
-            [
-                'name' => 'Cerdo color 2',
-                'path' => 'storage/images/icons/cerdo-color-2.png',
-            ],
-            [
-                'name' => 'Cerdo bn 1',
-                'path' => 'storage/images/icons/cerdo-bn-1.png',
-            ],
-            [
-                'name' => 'Cerdo bn 2',
-                'path' => 'storage/images/icons/cerdo-bn-2.png',
-            ],
-            [
-                'name' => 'Pescado color 1',
-                'path' => 'storage/images/icons/pescado-color-1.png',
-            ],
-            [
-                'name' => 'Pescado color 2',
-                'path' => 'storage/images/icons/pescado-color-2.png',
-            ],
-            [
-                'name' => 'Pescado bn 1',
-                'path' => 'storage/images/icons/pescado-bn-1.png',
-            ],
-            [
-                'name' => 'Pescado bn 2',
-                'path' => 'storage/images/icons/pescado-bn-2.png',
+                'name' => 'Pescado 2',
+                'path' => 'storage/images/icons/pescado-2.png',
             ],
             [
                 'name' => 'Arroz 1',
@@ -102,6 +74,54 @@ class IconSeeder extends Seeder
             [
                 'name' => 'Postre 2',
                 'path' => 'storage/images/icons/postre-2.png',
+            ],
+            [
+                'name' => 'Huevo 1',
+                'path' => 'storage/images/icons/huevo-1.png',
+            ],
+            [
+                'name' => 'Huevo 2',
+                'path' => 'storage/images/icons/huevo-2.png',
+            ],
+            [
+                'name' => 'Ensalada 1',
+                'path' => 'storage/images/icons/ensalada-1.png',
+            ],
+            [
+                'name' => 'Ensalada 2',
+                'path' => 'storage/images/icons/ensalada-2.png',
+            ],
+            [
+                'name' => 'Sopa 1',
+                'path' => 'storage/images/icons/sopa-1.png',
+            ],
+            [
+                'name' => 'Sopa 2',
+                'path' => 'storage/images/icons/sopa-2.png',
+            ],
+            [
+                'name' => 'Pan 1',
+                'path' => 'storage/images/icons/pan-1.png',
+            ],
+            [
+                'name' => 'Pan 2',
+                'path' => 'storage/images/icons/pan-2.png',
+            ],
+            [
+                'name' => 'Bollería 1',
+                'path' => 'storage/images/icons/bolleria-1.png',
+            ],
+            [
+                'name' => 'Bollería 2',
+                'path' => 'storage/images/icons/bolleria-2.png',
+            ],
+            [
+                'name' => 'Legumbres',
+                'path' => 'storage/images/icons/legumbres.png',
+            ],
+            [
+                'name' => 'Guisantes',
+                'path' => 'storage/images/icons/guisantes.png',
             ],
         ] );
     }

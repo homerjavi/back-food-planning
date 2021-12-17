@@ -18,8 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call( [UserSeeder::class] );
+        $this->call( UserSeeder::class );
+        $this->call( IconSeeder::class );
+        $this->call( CategorySeeder::class );
+        $this->call( MealSeeder::class );
+        $this->call( MealTypeSeeder::class );
+        $this->call( MealHourSeeder::class );
         /* Category::factory(10)->create();        
-        Meal::factory(10)->create();         */
+        Meal::factory(10)->create(); */
     }
 }
