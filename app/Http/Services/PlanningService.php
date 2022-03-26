@@ -10,16 +10,17 @@ use DateTime;
 
 class PlanningService
 {
-    public function getPlanning()
+    public function getPlanning( int $weekDiff )
     {
-        $day        = new DateTime('monday this week');
+        $day        = ( new DateTime('monday this week') )->modify($weekDiff . ' week');
         $planning   = [];
         $daysOfWeek = [ 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo' ];
         $mealHours  = MealHour::orderBy( 'order' )->get();
         $mealTypes  = MealType::orderBy( 'order' )->get();
 
         for ($i=1; $i <=7 ; $i++) { 
-            $planning[ $i ][ 'name' ]   = $daysOfWeek [ $i-1 ];
+            $planning[ $i ][ 'name' ] = $daysOfWeek [ $i-1 ];
+            $planning[ $i ][ 'date' ] = $day->format('d-m-Y');;
 
             $planning[ $i ][ 'hours' ] = [];
             foreach ( $mealHours as $mealHour ) {

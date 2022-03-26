@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 
 class PlanningController extends Controller
 {
-    public function index( PlanningService $planningService )
+    public function index( Request $request, PlanningService $planningService )
     {
         $meals      = Meal::with('category')->get();
         $categories = Category::with('meals')->get();
@@ -24,7 +24,7 @@ class PlanningController extends Controller
         $mealHours  = MealHour::orderBy( 'order' )->get();
   
         $data = [
-            'planning'   => $planningService->getPlanning(),
+            'planning'   => $planningService->getPlanning( $request->weekDiff ),
             'categories' => CategoryResource::collection( $categories ),
             'meals'      => $meals,
             'mealTypes'  => $mealTypes,
@@ -36,12 +36,12 @@ class PlanningController extends Controller
 
     public function store( Request $request )
     {
-        $mondayThisWeek  = new DateTime('monday this week');
+        /* $mondayThisWeek  = new DateTime('monday this week');
         $date            = date('Y-m-d', strtotime($mondayThisWeek->format( 'Y-m-d' ) . ' +' . ( $request->day_of_week-1 ) . 'days' ) );
-
+ */
         $planning               = new Planning();
         $planning->meal_id      = $request->meal_id;
-        $planning->date         = $date;
+        $planning->date         = (new Datetime($request->date))->format('Y-m-d');
         $planning->day_of_week  = $request->day_of_week;
         $planning->meal_hour_id = $request->meal_hour_id;
         $planning->meal_type_id = MealType::first()->id;

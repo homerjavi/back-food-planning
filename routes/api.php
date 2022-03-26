@@ -38,8 +38,8 @@ Route::post( 'mealHours', 'MealHourController@store' )->name( 'mealHours.store.a
 Route::patch( 'mealHours/{mealHour}', 'MealHourController@update' )->name( 'mealHours.update.api' );
 Route::delete( 'mealHours/{mealHour}', 'MealHourController@destroy' )->name( 'mealHours.destroy.api' );
 
-Route::get( 'planning', 'PlanningController@index' )->name( 'planning.api' );
-Route::post( 'planning', 'PlanningController@store' )->name( 'planning.store.api' );
+Route::post( 'planning', 'PlanningController@index' )->name( 'planning.api' );
+Route::post( 'planningStore', 'PlanningController@store' )->name( 'planning.store.api' );
 Route::post( 'update-order-planning', 'PlanningController@updateOrderPlanning' )->name( 'planning.updateOrder.api' );
 Route::delete( 'planning/{planning}', 'PlanningController@destroy' )->name( 'planning.delete.api' );
 Route::delete( 'delete-all-planning', 'PlanningController@deleteAll' )->name( 'planning.delete-all.api' );
