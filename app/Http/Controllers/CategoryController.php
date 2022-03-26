@@ -35,10 +35,6 @@ class CategoryController extends Controller
 
     public function update( Request $request, Category $category, CategoryService $categoryService )
     {
-        /* $category->name           = $request[ 'name' ];
-        $category->icon_id        = $request[ 'icon' ][ 'id' ];
-        $category->optimum_number = $request[ 'optimum_number' ]; */
-
         $category = $categoryService->save( $request, $category );
      
         if( $category->isDirty() ){

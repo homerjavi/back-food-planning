@@ -40,6 +40,7 @@ Route::delete( 'mealHours/{mealHour}', 'MealHourController@destroy' )->name( 'me
 
 Route::post( 'planning', 'PlanningController@index' )->name( 'planning.api' );
 Route::post( 'planningStore', 'PlanningController@store' )->name( 'planning.store.api' );
+Route::post( 'updateMealType', 'PlanningController@updateMealType' )->name( 'planning.updateMealType.api' );
 Route::post( 'update-order-planning', 'PlanningController@updateOrderPlanning' )->name( 'planning.updateOrder.api' );
 Route::delete( 'planning/{planning}', 'PlanningController@destroy' )->name( 'planning.delete.api' );
 Route::delete( 'delete-all-planning', 'PlanningController@deleteAll' )->name( 'planning.delete-all.api' );

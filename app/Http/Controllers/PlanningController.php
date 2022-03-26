@@ -36,15 +36,12 @@ class PlanningController extends Controller
 
     public function store( Request $request )
     {
-        /* $mondayThisWeek  = new DateTime('monday this week');
-        $date            = date('Y-m-d', strtotime($mondayThisWeek->format( 'Y-m-d' ) . ' +' . ( $request->day_of_week-1 ) . 'days' ) );
- */
         $planning               = new Planning();
         $planning->meal_id      = $request->meal_id;
         $planning->date         = (new Datetime($request->date))->format('Y-m-d');
         $planning->day_of_week  = $request->day_of_week;
         $planning->meal_hour_id = $request->meal_hour_id;
-        $planning->meal_type_id = MealType::first()->id;
+        $planning->meal_type_id = $request->meal_type_id;
         $planning->order        = $request->order;
         $planning->save();
         
@@ -57,13 +54,7 @@ class PlanningController extends Controller
             ->get();
     
             return response()->json( PlanningResource::collection( $planningTarget ) );
-
-        /* $data = [
-            'planning' => new PlanningResource( $planning ),
-        ];
-
-        return response()->json( $data ); */
-        
+   
     }
 
     public function updateOrderPlanning( Request $request )
@@ -80,6 +71,16 @@ class PlanningController extends Controller
                         ->get();
 
         return response()->json( PlanningResource::collection( $planningTarget ) );
+    }
+
+    public function updateMealType( Request $request )
+    {
+        // return $request->all();
+        return Planning::find( $request->id )->update( [ 
+            'meal_type_id' => $request->meal_type_id
+         ] );
+
+
     }
 
     /* public function update( Request $request, Planning $planning )

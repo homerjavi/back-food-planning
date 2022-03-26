@@ -11,6 +11,13 @@ class Planning extends Model
 {
     use HasFactory;
 
+    protected $fillable = [ 'meal_type_id' ];
+
+    public function mealType()
+    {
+        return $this->belongsTo(MealType::class);
+    }
+
     public function updateOrderSameType( $isDeleted = null )
     {
         $planningsToUpdateOrder = $this->sameType()

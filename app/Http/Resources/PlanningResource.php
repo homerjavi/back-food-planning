@@ -27,6 +27,7 @@ class PlanningResource extends JsonResource
             'category_id'  => $meal->category_id ?? '',
             'order'        => $this->order,
             'icon_path'    => $meal ? asset( $meal->category->icon->path ) : '',
+            'color'        => $this->meal_type_id ? $this->mealType->color : '',
         ];
     }
 }

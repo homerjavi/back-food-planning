@@ -36,13 +36,13 @@ class MealController extends Controller
 
     public function update( Request $request, Meal $meal )
     {
-        $meal->name        = $meal[ 'name' ];
-        $meal->description = $meal[ 'description' ];
-        $meal->category_id = $meal[ 'category' ][ 'id' ];
-        $meal->difficulty  = $meal[ 'difficulty' ];
-        $meal->minutes     = $meal[ 'minutes' ];
-        $meal->kalories    = $meal[ 'kalories' ];
-        $meal->recipe      = $meal[ 'recipe' ];
+        $meal->name        = $request[ 'name' ];
+        $meal->description = $request[ 'description' ];
+        $meal->category_id = $request[ 'category' ][ 'id' ];
+        $meal->difficulty  = $request[ 'difficulty' ];
+        $meal->minutes     = $request[ 'minutes' ];
+        $meal->kalories    = $request[ 'kalories' ];
+        $meal->recipe      = $request[ 'recipe' ];
      
         if( $meal->isDirty() ){
             $meal->save();
