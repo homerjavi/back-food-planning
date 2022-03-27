@@ -167,7 +167,7 @@ class PlanningController extends Controller
         $categories = Category::with('meals')->get();
   
         $data = [
-            'planning'   => $planningService->getPlanning(),
+            'planning'   => $planningService->getPlanning(0),
             'categories' => $categories,
             'meals'      => $meals,
         ];

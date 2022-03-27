@@ -21,11 +21,12 @@ class Planning extends Model
     public function updateOrderSameType( $isDeleted = null )
     {
         $planningsToUpdateOrder = $this->sameType()
-                                       //->equalOrHigherOrder($this->order)
                                        ->orderBy('order')
-                                       ->orderBy('updated_at', 'DESC')
-                                    //    ->orderBy('created_at', 'ASC')
-                                       ->get();
+                                       ->orderBy('updated_at', 'DESC');
+
+        if ( $isDeleted ) {
+            $planningsToUpdateOrder->where( 'id', '!=', $this->id );
+        }
                                        
         // return $planningsToUpdateOrder;
 
@@ -33,11 +34,11 @@ class Planning extends Model
 
         //dump( $planningsToUpdateOrder, $firstOrder );
 
-        $firstOrder = 1;
-        foreach ($planningsToUpdateOrder as $index => $planning) {
+        $order = 1;
+        foreach ($planningsToUpdateOrder->get() as $planning) {
             // $p = Planning::find( $planning->id );
             // $planning->order = $isDeleted ? $planning->order - 1 : $firstOrder++;
-            $planning->order = $firstOrder++;
+            $planning->order = $order++;
             
             $planning->save();
         }
