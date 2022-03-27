@@ -49,7 +49,7 @@ class PlanningController extends Controller
 
         $planningTarget = Planning::where('date', $planning->date)
             ->where('meal_hour_id', $planning->meal_hour_id)
-            ->where('meal_type_id', $planning->meal_type_id)
+            // ->where('meal_type_id', $planning->meal_type_id)
             ->orderBy('order')
             ->get();
     
@@ -63,10 +63,11 @@ class PlanningController extends Controller
         $planning->order         = $request->order;
         $planning->save();
         $planning->updateOrderSameType( false );
+        //return response()->json( $planning->updateOrderSameType( false ) );
 
         $planningTarget = Planning::where('date', $planning->date)
                         ->where('meal_hour_id', $planning->meal_hour_id)
-                        ->where('meal_type_id', $planning->meal_type_id)
+                        // ->where('meal_type_id', $planning->meal_type_id)
                         ->orderBy('order')
                         ->get();
 
@@ -146,7 +147,7 @@ class PlanningController extends Controller
         if( $isDestroy ){
             $planningTarget = Planning::where('date', $planning->date)
             ->where('meal_hour_id', $planning->meal_hour_id)
-            ->where('meal_type_id', $planning->meal_type_id)
+            //->where('meal_type_id', $planning->meal_type_id)
             ->orderBy('order')
             ->get();
     

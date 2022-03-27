@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return "HOOOOOLA";
+    return phpinfo();
 });
 
 Route::get( 'test', 'TestController@test' )->name( 'test' );

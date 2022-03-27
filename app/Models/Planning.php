@@ -21,20 +21,23 @@ class Planning extends Model
     public function updateOrderSameType( $isDeleted = null )
     {
         $planningsToUpdateOrder = $this->sameType()
-                                       ->equalOrHigherOrder($this->order)
+                                       //->equalOrHigherOrder($this->order)
                                        ->orderBy('order')
                                        ->orderBy('updated_at', 'DESC')
                                     //    ->orderBy('created_at', 'ASC')
                                        ->get();
                                        
+        // return $planningsToUpdateOrder;
 
-        $firstOrder = count($planningsToUpdateOrder) > 0 ? $planningsToUpdateOrder->first()->order + 1 : 0;
+        // $firstOrder = count($planningsToUpdateOrder) > 0 ? $planningsToUpdateOrder->first()->order + 1 : 0;
 
         //dump( $planningsToUpdateOrder, $firstOrder );
 
+        $firstOrder = 1;
         foreach ($planningsToUpdateOrder as $index => $planning) {
             // $p = Planning::find( $planning->id );
-            $planning->order = $isDeleted ? $planning->order - 1 : $firstOrder++;
+            // $planning->order = $isDeleted ? $planning->order - 1 : $firstOrder++;
+            $planning->order = $firstOrder++;
             
             $planning->save();
         }
@@ -43,8 +46,8 @@ class Planning extends Model
     public function scopeSameType(Builder $query)
     {
         return $query->where('date', $this->date)
-                     ->where('meal_hour_id', $this->meal_hour_id)
-                     ->where('meal_type_id', $this->meal_type_id);
+                     ->where('meal_hour_id', $this->meal_hour_id);
+                    //  ->where('meal_type_id', $this->meal_type_id);
     }
 
     public function scopeEqualOrHigherOrder(Builder $query, $order)
