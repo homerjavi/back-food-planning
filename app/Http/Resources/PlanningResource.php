@@ -17,17 +17,19 @@ class PlanningResource extends JsonResource
     {
         $meal = Meal::find( $this->meal_id );
         return [
-            'id'           => $this->id,
-            'meal_id'      => $this->meal_id,
-            'meal_hour_id' => $this->meal_hour_id,
-            'meal_type_id' => $this->meal_type_id,
-            'date'         => $this->date,
-            'day_of_week'  => $this->day_of_week,
-            'name'         => $meal->name ?? '',
-            'category_id'  => $meal->category_id ?? '',
-            'order'        => $this->order,
-            'icon_path'    => $meal ? asset( $meal->category->icon->path ) : '',
-            'color'        => $this->meal_type_id ? $this->mealType->color : '',
+            'id'              => $this->id,
+            'meal_id'         => $this->meal_id,
+            'meal_hour_id'    => $this->meal_hour_id,
+            'meal_type_id'    => $this->meal_type_id,
+            'date'            => $this->date,
+            'day_of_week'     => $this->day_of_week,
+            'name'            => $meal->name ?? '',
+            'category_id'     => $meal->category_id ?? '',
+            'category_name'   => $meal->category->name ?? '',
+            'order'           => $this->order,
+            'icon_path'       => $meal ? asset( $meal->category->icon->path ) : '',
+            'meal_type_color' => $this->meal_type_id ? $this->mealType->color : '',
+            'meal_type_name'  => $this->meal_type_id ? $this->mealType->name : '',
         ];
     }
 }
