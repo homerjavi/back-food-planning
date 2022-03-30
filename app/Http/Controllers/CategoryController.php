@@ -15,11 +15,14 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('meals')->get();
+        $categories = Category::with( [ 'meals' => function( $query ) {
+            $query->orderBy( 'name' );
+        } ] )        
+        ->orderBy( 'name' )->get();
         
         $data = [
             'categories' => CategoryMealResource::collection( $categories ),
-            'icons'      => IconResource::collection( Icon::all() ),
+            'icons'      => IconResource::collection( Icon::orderBy( 'name' )->get() ),
         ];
 
         return response()->json( $data );

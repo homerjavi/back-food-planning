@@ -13,7 +13,7 @@ class MealController extends Controller
  
     public function index()
     {
-        $meals = Meal::with('category')->get();
+        $meals = Meal::with('category')->orderBy( 'name' )->get();
 
         return response()->json( MealCategoryResource::collection($meals) );
         
@@ -56,6 +56,6 @@ class MealController extends Controller
         $meal = Meal::find($meal);
         $meal->delete();
 
-        return response()->json( MealCategoryResource::collection( Meal::get() ) );        
+        return response()->json( MealCategoryResource::collection( Meal::orderBy('name')->get() ) );        
     }
 }
