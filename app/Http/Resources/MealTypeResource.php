@@ -9,10 +9,11 @@ class MealTypeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'    => $this->id,
-            'name'  => $this->name,
-            'color' => $this->color,
-            'order' => $this->order,
+            'id'      => $this->id,
+            'name'    => $this->name,
+            'general' => (bool) $this->general,
+            'color'   => $this->color,
+            'order'   => $this->order,
         ];
     }
 }

@@ -19,9 +19,10 @@ class MealTypeController extends Controller
     {
         $mealType = new MealType();
 
-        $mealType->name  = $request[ 'name' ];
-        $mealType->color = $request[ 'color' ];
-        $mealType->order = $request[ 'order' ] ?? MealType::max( 'order' ) + 1;
+        $mealType->name    = $request[ 'name' ];
+        $mealType->general = $request[ 'general' ];
+        $mealType->color   = $request[ 'color' ];
+        $mealType->order   = $request[ 'order' ] ?? MealType::max( 'order' ) + 1;
 
         MealType::updateOrders();
 
@@ -32,9 +33,10 @@ class MealTypeController extends Controller
 
     public function update(MealTypeUpdateRequest $request, MealType $mealType)
     {
-        $mealType->name  = $request[ 'name' ];
-        $mealType->color = $request[ 'color' ];
-        $mealType->order = $request[ 'order' ] ?? MealType::max( 'order' ) + 1;
+        $mealType->name    = $request[ 'name' ];
+        $mealType->general = $request[ 'general' ];
+        $mealType->color   = $request[ 'color' ];
+        $mealType->order   = $request[ 'order' ] ?? MealType::max( 'order' ) + 1;
 
         if ( $mealType->isDirty() ) {
             $mealType->save();
