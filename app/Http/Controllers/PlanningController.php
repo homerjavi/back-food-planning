@@ -19,7 +19,7 @@ class PlanningController extends Controller
     public function index( Request $request, PlanningService $planningService )
     {
         $meals      = Meal::with('category')->get();
-        $categories = Category::with('meals')->get();
+        $categories = Category::with( 'meals' )->orderBy( 'name' )->get();
         $mealTypes  = MealType::orderBy( 'order' )->get();
         $mealHours  = MealHour::orderBy( 'order' )->get();
   
@@ -41,7 +41,7 @@ class PlanningController extends Controller
         $planning->date         = (new Datetime($request->date))->format('Y-m-d');
         $planning->day_of_week  = $request->day_of_week;
         $planning->meal_hour_id = $request->meal_hour_id;
-        $planning->meal_type_id = $request->meal_type_id;
+        $planning->meal_type_id = MealType::orderBy( 'order' )->first()->id;
         $planning->order        = $request->order;
         $planning->save();
         
@@ -49,7 +49,6 @@ class PlanningController extends Controller
 
         $planningTarget = Planning::where('date', $planning->date)
             ->where('meal_hour_id', $planning->meal_hour_id)
-            // ->where('meal_type_id', $planning->meal_type_id)
             ->orderBy('order')
             ->get();
     
