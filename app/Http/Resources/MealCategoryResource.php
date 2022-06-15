@@ -11,7 +11,7 @@ class MealCategoryResource extends JsonResource
         return [
             'id'          => $this->id,
             'name'        => $this->name,
-            'category'    => $this->category ? new CategoryResource( $this->category ) : [],
+            'category'    => $this->category ? new CategoryResource( $this->category ) : [], 
             'difficulty'  => $this->difficulty,
             'minutes'     => $this->minutes,
             'kalories'    => $this->kalories,
