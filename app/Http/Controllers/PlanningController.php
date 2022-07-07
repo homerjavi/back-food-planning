@@ -36,12 +36,16 @@ class PlanningController extends Controller
 
     public function store( Request $request )
     {
+        if ( !session( 'lastMealTypeUsed' ) ) {
+            session( [ 'lastMealTypeUsed' => MealType::orderBy( 'order' )->first()->id ] );
+        }
+        
         $planning               = new Planning();
         $planning->meal_id      = $request->meal_id;
         $planning->date         = (new Datetime($request->date))->format('Y-m-d');
         $planning->day_of_week  = $request->day_of_week;
         $planning->meal_hour_id = $request->meal_hour_id;
-        $planning->meal_type_id = MealType::orderBy( 'order' )->first()->id;
+        $planning->meal_type_id = session( 'lastMealTypeUsed' );
         $planning->order        = $request->order;
         $planning->save();
         
