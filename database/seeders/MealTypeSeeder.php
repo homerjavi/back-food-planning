@@ -14,10 +14,22 @@ class MealTypeSeeder extends Seeder
      */
     public function run()
     {
-        MealType::create( [
-            'name' => 'Todos',
-            'order' => 1,
-            'color' => '#ffffff'
+        MealType::insert( [
+            [
+                'name' => 'Todos',
+                'order' => 1,
+                'color' => '#ffffff'
+            ],
+            [
+                'name' => 'Lucas',
+                'order' => 2,
+                'color' => '#fff000'
+            ],
+            [
+                'name' => 'Javi y Jessi',
+                'order' => 3,
+                'color' => '#000fff'
+            ],
         ] );
     }
 }

@@ -15,9 +15,11 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        Category::create( [
+        /* Category::create( [
             'name'    => 'Categoría 1',
-            'icon_id' => Icon::first()->id,
-        ] );
+            'icon_id' => Icon::inRandomOrder()->first()->id,
+        ] ); */
+
+        Category::factory(10)->create();
     }
 }

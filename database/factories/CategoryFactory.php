@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Icon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoryFactory extends Factory
@@ -22,7 +23,9 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name
+            'name'    => $this->faker->name,
+            'icon_id' => Icon::inRandomOrder()->first()->id,
+            'optimum_number' => $this->faker->numberBetween($min = 1, $max = 3),
         ];
     }
 }

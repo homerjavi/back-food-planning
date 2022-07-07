@@ -14,9 +14,15 @@ class MealHourSeeder extends Seeder
      */
     public function run()
     {
-        MealHour::create( [
-            'name'  => 'Almuerzo',
-            'order' => 1,
+        MealHour::insert( [
+            [
+                'name'  => 'Almuerzo',
+                'order' => 1,
+            ],
+            [
+                'name'  => 'Cena',
+                'order' => 2,
+            ],
         ] );
     }
 }
