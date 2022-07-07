@@ -29,6 +29,7 @@ class MealController extends Controller
         $meal->minutes     = $request->minutes;
         $meal->kalories    = $request->kalories;
         $meal->recipe      = $request->recipe;
+        $meal->favorite    = $request->favorite;
         $meal->save();
 
         return response()->json( new MealCategoryResource( $meal ) );
@@ -43,6 +44,7 @@ class MealController extends Controller
         $meal->minutes     = $request[ 'minutes' ];
         $meal->kalories    = $request[ 'kalories' ];
         $meal->recipe      = $request[ 'recipe' ];
+        $meal->favorite    = $request[ 'favorite' ];
      
         if( $meal->isDirty() ){
             $meal->save();

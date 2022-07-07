@@ -17,6 +17,7 @@ class MealCategoryResource extends JsonResource
             'kalories'    => $this->kalories,
             'recipe'      => $this->recipe,
             'description' => $this->description,
+            'favorite'    => $this->favorite,
         ];
     }
 }
