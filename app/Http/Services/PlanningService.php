@@ -20,7 +20,7 @@ class PlanningService
 
         for ($i=1; $i <=7 ; $i++) { 
             $planning[ $i ][ 'name' ] = $daysOfWeek [ $i-1 ];
-            $planning[ $i ][ 'date' ] = $day->format('d-m-Y');;
+            $planning[ $i ][ 'date' ] = $day->format('Y-m-d');;
 
             $planning[ $i ][ 'hours' ] = [];
             foreach ( $mealHours as $mealHour ) {

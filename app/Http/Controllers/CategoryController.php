@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Resources\CategoryMealResource;
 use App\Http\Resources\CategoryResource;
@@ -13,12 +14,18 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $categories = Category::with( [ 'meals' => function( $query ) {
-            $query->orderBy( 'name' );
-        } ] )        
-        ->orderBy( 'name' )->get();
+        $this->authorizeResource(Category::class, 'category', [ 'except' => ['index', 'store'] ]);
+    }
+
+    public function index( Request $request )
+    {
+        $categories = Category::fromAuthenticatedUser()
+                        ->with( [ 'meals' => function( $query ) {
+                            $query->orderBy( 'name' );
+                        } ] )        
+                        ->orderBy( 'name' )->get();
         
         $data = [
             'categories' => CategoryMealResource::collection( $categories ),
@@ -28,30 +35,21 @@ class CategoryController extends Controller
         return response()->json( $data );
     }
 
-    public function store( CategoryStoreRequest $request, CategoryService $categoryService )
+    public function store( CategoryRequest $request )
     {
-        
-        $category = $categoryService->save( $request );
-
+        $category = Category::create( $request->input() );
         return response()->json( new CategoryResource( $category ) );
     }
 
-    public function update( Request $request, Category $category, CategoryService $categoryService )
+    public function update( CategoryRequest $request, Category $category )
     {
-        $category = $categoryService->save( $request, $category );
-     
-        if( $category->isDirty() ){
-            $category->save();
-        }
-
+        $category->update( $request->input() );
         return response()->json( new CategoryResource( $category ) );
     }
 
-    public function destroy( $category )
-    {
-        $category = Category::find($category);
+    public function destroy( Category $category )
+    {    
         $category->delete();
-    
-        return response()->json( CategoryResource::collection( Category::get() ) );
+        return response()->json( CategoryResource::collection( Category::fromAuthenticatedUser()->orderBy('name')->get() ) );
     }
 }

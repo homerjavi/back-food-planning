@@ -2,62 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MealRequest;
 use App\Http\Resources\MealCategoryResource;
-use App\Http\Resources\MealResource;
 use App\Models\Category;
 use App\Models\Meal;
 use Illuminate\Http\Request;
 
 class MealController extends Controller
 {
- 
+    public function __construct()
+    {
+        $this->authorizeResource(Meal::class, 'meal', [ 'except' => ['index', 'store'] ]);
+    }
+
     public function index()
     {
-        $meals = Meal::with('category')->orderBy( 'name' )->get();
-
+        $meals = Meal::fromAuthenticatedUser()->with('category')->orderBy( 'name' )->get();
         return response()->json( MealCategoryResource::collection($meals) );
-        
     }
 
-    public function store( Request $request )
+    public function store( MealRequest $request )
     {
-        $meal = new Meal();
-        $meal->name        = $request->name;
-        $meal->description = $request->description;
-        $meal->category_id = $request->category[ 'id' ];
-        $meal->difficulty  = $request->difficulty;
-        $meal->minutes     = $request->minutes;
-        $meal->kalories    = $request->kalories;
-        $meal->recipe      = $request->recipe;
-        $meal->favorite    = $request->favorite;
-        $meal->save();
-
+        $meal = Meal::create( $request->input() );
         return response()->json( new MealCategoryResource( $meal ) );
     }
 
-    public function update( Request $request, Meal $meal )
+    public function update( MealRequest $request, Meal $meal )
     {
-        $meal->name        = $request[ 'name' ];
-        $meal->description = $request[ 'description' ];
-        $meal->category_id = $request[ 'category' ][ 'id' ];
-        $meal->difficulty  = $request[ 'difficulty' ];
-        $meal->minutes     = $request[ 'minutes' ];
-        $meal->kalories    = $request[ 'kalories' ];
-        $meal->recipe      = $request[ 'recipe' ];
-        $meal->favorite    = $request[ 'favorite' ];
-     
-        if( $meal->isDirty() ){
-            $meal->save();
-        }
-
+        $meal->update( $request->input() );
         return response()->json( new MealCategoryResource( $meal ) );
     }
 
-    public function destroy( $meal )
+    public function destroy( Meal $meal )
     {
-        $meal = Meal::find($meal);
         $meal->delete();
-
-        return response()->json( MealCategoryResource::collection( Meal::orderBy('name')->get() ) );        
+        return response()->json( MealCategoryResource::collection( Meal::fromAuthenticatedUser()->orderBy('name')->get() ) );        
     }
 }

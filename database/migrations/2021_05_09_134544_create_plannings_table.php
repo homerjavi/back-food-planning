@@ -19,8 +19,8 @@ class CreatePlanningsTable extends Migration
             $table->unsignedBigInteger('meal_hour_id');
             $table->unsignedBigInteger('meal_type_id')->nullable();
             $table->date('date');
-            $table->string('day_of_week');
-            $table->integer('order');
+            $table->unsignedTinyInteger('day_of_week');
+            $table->unsignedInteger('order');
             $table->timestamps();
         });
     }

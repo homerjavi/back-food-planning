@@ -11,44 +11,65 @@ class Planning extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'meal_type_id' ];
+    protected $guarded = [ 'id' ];
 
     public function mealType()
     {
         return $this->belongsTo(MealType::class);
     }
 
-    public function updateOrderSameType( $isDeleted = null )
+    /* public function updateOrderSameType( bool $isDeleted = null )
     {
-        $planningsToUpdateOrder = $this->sameType()
+        $planningsToUpdateOrder = $this::fromAuthenticatedUser()->sameType()
                                        ->orderBy('order')
                                        ->orderBy('updated_at', 'DESC');
 
         if ( $isDeleted ) {
             $planningsToUpdateOrder->where( 'id', '!=', $this->id );
         }
-                                       
-        // return $planningsToUpdateOrder;
-
-        // $firstOrder = count($planningsToUpdateOrder) > 0 ? $planningsToUpdateOrder->first()->order + 1 : 0;
-
-        //dump( $planningsToUpdateOrder, $firstOrder );
 
         $order = 1;
         foreach ($planningsToUpdateOrder->get() as $planning) {
-            // $p = Planning::find( $planning->id );
-            // $planning->order = $isDeleted ? $planning->order - 1 : $firstOrder++;
             $planning->order = $order++;
-            
             $planning->save();
+        }
+    } */
+
+    public static function updateOrderSameType( Planning $planning, string $method = '' )
+    {
+        $planningsToUpdateOrder = Planning::fromAuthenticatedUser()
+            ->where( 'id', '!=', $planning->id )
+            ->sameType( $planning )
+            ->orderBy('order')
+            ->get();
+
+        /* if ( $method == 'store' ){
+            $planningsToUpdateOrder = $planningsToUpdateOrder->orderBy( 'created_at', 'DESC' )
+                        ->get();
+        } else if ( $method == 'update' ){
+            $planningsToUpdateOrder = $planningsToUpdateOrder->orderBy( 'updated_at', 'DESC' )
+                        ->get();
+        } else{
+            $planningsToUpdateOrder = $planningsToUpdateOrder->get();
+        } */
+
+        $newOrder = 1;
+        // $maxOrder = 0;
+        foreach ( $planningsToUpdateOrder as $planningToUpdateOrder ) {
+            if ( $newOrder == $planning->order && $method != 'delete' ){
+                $newOrder++;    
+            }
+            
+            $planningToUpdateOrder->order = $newOrder;
+            $planningToUpdateOrder->save();
+            $newOrder++;
         }
     }
 
-    public function scopeSameType(Builder $query)
+    public function scopeSameType(Builder $query, Planning $planning)
     {
-        return $query->where('date', $this->date)
-                     ->where('meal_hour_id', $this->meal_hour_id);
-                    //  ->where('meal_type_id', $this->meal_type_id);
+        return $query->where('date', $planning->date)
+                     ->where('meal_hour_id', $planning->meal_hour_id);
     }
 
     public function scopeEqualOrHigherOrder(Builder $query, $order)
@@ -57,5 +78,28 @@ class Planning extends Model
                      ->where('id', '!=', $this->id);
     }
 
+    public function scopeFromAuthenticatedUser( Builder $builder )
+    {
+        return $builder->whereAccountId( auth()->user()->account_id );
+    }
+
+    protected static function boot() {
+        parent::boot();
+        self::creating(function ($model) {
+            if (!app()->runningInConsole()) {
+                $model->created_by = auth()->user()->id;
+                $model->account_id = auth()->user()->account_id;
+                $model->order      = request()->order ?? Planning::fromAuthenticatedUser()->where('date', request()->date)
+                    ->where('meal_hour_id', request()->meal_hour_id)
+                    ->count() + 1;
+            }
+        });
+
+        self::updating(function ($model) {
+            if (!app()->runningInConsole()) {
+                $model->updated_by = auth()->user()->id;
+            }
+        });
+    }
 
 }

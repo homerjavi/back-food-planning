@@ -22,7 +22,6 @@ class CreateMealsTable extends Migration
             $table->integer('minutes')->nullable();
             $table->integer('kalories')->nullable();
             $table->string('recipe')->nullable();
-            $table->boolean('favorite')->nullable();
             $table->timestamps();
         });
     }

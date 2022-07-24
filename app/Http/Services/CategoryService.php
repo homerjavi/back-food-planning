@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\PlanningResource;
 use App\Models\Category;
 use App\Models\Icon;
@@ -12,7 +13,7 @@ use DateTime;
 
 class CategoryService
 {
-    public function save( $request, $category = null )
+    public function save( CategoryRequest $request, Category $category = null ) :Category
     {
         if ( !$category ) {
             $category = new Category();

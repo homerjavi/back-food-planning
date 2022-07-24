@@ -10,49 +10,49 @@ use Illuminate\Http\Request;
 
 class MealTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(MealType::class, 'mealType', [ 'except' => ['index', 'store'] ]);
+    }
+
     public function index()
     {
-        return response()->json( MealTypeResource::collection( MealType::orderBy( 'order' )->get() ) );
+        return response()->json( MealTypeResource::collection( MealType::fromAuthenticatedUser()->orderBy( 'order' )->get() ) );
     }
 
     public function store(MealTypeStoreRequest $request)
     {
-        $mealType = new MealType();
+        // $mealType = new MealType();
 
-        $mealType->name    = $request[ 'name' ];
-        $mealType->general = $request[ 'general' ];
-        $mealType->color   = $request[ 'color' ];
-        $mealType->order   = $request[ 'order' ] ?? MealType::max( 'order' ) + 1;
+        // $mealType->name    = $request[ 'name' ];
+        // $mealType->general = $request[ 'general' ] ?? false;
+        // $mealType->color   = $request[ 'color' ] ?? '#ffffff';
+        // $mealType->order   = $request[ 'order' ] ?? MealType::fromAuthenticatedUser()->max( 'order' ) + 1;
 
-        MealType::updateOrders();
+        // $mealType->save();
 
-        $mealType->save();
+        // MealType::updateOrders( $mealType->id, 'store' );
 
-        return response()->json( MealTypeResource::collection( MealType::orderBy( 'order' )->get() ) );
+        $mealType = MealType::create( $request->input() );
+        MealType::updateOrders( $mealType );
+
+        return response()->json( MealTypeResource::collection( MealType::fromAuthenticatedUser()->orderBy( 'order' )->get() ) );
     }
 
     public function update(MealTypeUpdateRequest $request, MealType $mealType)
     {
-        $mealType->name    = $request[ 'name' ];
-        $mealType->general = $request[ 'general' ];
-        $mealType->color   = $request[ 'color' ];
-        $mealType->order   = $request[ 'order' ] ?? MealType::max( 'order' ) + 1;
+        $mealType->update( $request->input() );
+        MealType::updateOrders( $mealType->id, 'update' );
 
-        if ( $mealType->isDirty() ) {
-            $mealType->save();
-        }
-
-        MealType::updateOrders();
-
-        return response()->json( MealTypeResource::collection( MealType::orderBy( 'order' )->get() ) );
+        return response()->json( MealTypeResource::collection( MealType::fromAuthenticatedUser()->orderBy( 'order' )->get() ) );
     }
 
-    public function destroy($id)
+    public function destroy( MealType $mealType )
     {
-        MealType::destroy($id);
+        $mealType->delete();
 
-        MealType::updateOrders();
+        MealType::updateOrders( $mealType );
 
-        return response()->json( MealTypeResource::collection( MealType::orderBy( 'order' )->get() ) );
+        return response()->json( MealTypeResource::collection( MealType::fromAuthenticatedUser()->orderBy( 'order' )->get() ) );
     }
 }
