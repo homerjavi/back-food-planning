@@ -89,7 +89,7 @@ class Planning extends Model
             if (!app()->runningInConsole()) {
                 $model->created_by   = auth()->user()->id;
                 $model->account_id   = auth()->user()->account_id;
-                $model->meal_type_id = request()->meal_type_id ?? MealType::fromAuthenticatedUser()->orderBy('order')->first();
+                $model->meal_type_id = request()->meal_type_id ?? MealType::fromAuthenticatedUser()->orderBy('order')->first()->id;
                 $model->order        = request()->order ?? Planning::fromAuthenticatedUser()->where('date', request()->date)
                     ->where('meal_hour_id', request()->meal_hour_id)
                     ->count() + 1;
