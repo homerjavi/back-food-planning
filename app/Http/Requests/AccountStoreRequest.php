@@ -24,10 +24,10 @@ class AccountStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'account' => [ 'required', 'min:4', 'max:80' ],
-            'name'     => 'required|string',
+            'account' => [ 'required', 'min:4', 'max:80', 'unique:accounts' ],
+            'name'     => 'required|string|min:4|max:255',
             'email'    => 'required|string|email|unique:users',
-            'password' => 'required|string'
+            'password' => 'required|string|min:3|max:12'
         ];
     }
 }

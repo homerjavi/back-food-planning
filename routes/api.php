@@ -28,6 +28,8 @@ Route::group([
 ], function() {
     Route::get('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@user');
+    Route::post('updateUser', 'AuthController@update');
+    Route::post('uploadAvatar', 'AuthController@uploadAvatar');
 
 
     // Route::apiResource( 'categories', 'CategoryController' )->except('show')->middleware( 'can:update,delete' );

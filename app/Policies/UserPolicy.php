@@ -10,13 +10,13 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function update(User $user, Category $category)
+    public function update(User $user, User $userRequest)
     {
-        return $user->account_id === $category->account_id ?: $this->deny('Esta categoría no pertenece a su cuenta');
+        return $user->id === $userRequest->id && $user->account_id == request()->account_id ?: $this->deny('No tiene permisos para actualizar este usuario');
     }
 
-    public function delete(User $user, Category $category)
+    public function delete(User $user)
     {
-        return $user->account_id === $category->account_id ?: $this->deny('Esta categoría no pertenece a su cuenta');
+        return $user->id === request()->user()->id && $user->account_id == request()->account_id ?: $this->deny('No tiene permisos para eliminar este usuario');
     }
 }

@@ -38,7 +38,12 @@ class AuthService
 
         $token = $this->getNewToken();
 
-        return [ 'status' => 200, 'data' => [ 'username' => $this->user->name , 'token' => $token ] ];
+        return [ 'status' => 200, 'data' => [ 
+                'username' => $this->user->name, 
+                'userAvatarSrc' => asset( $this->user->avatar_path ), 
+                'token' => $token 
+            ] 
+        ];
     }
 
     public function getNewToken ( User $user = null, $rememberMe = false ) {
